@@ -1,0 +1,47 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - v*.*.*
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build release
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Package
+        run: cmd /c package-release.cmd
+
+      - name: Create GitHub release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          tag="${GITHUB_REF_NAME}"
+          notes=".github/release-notes/${tag}.md"
+
+          if [ ! -f "$notes" ]; then
+            notes="CHANGELOG.md"
+          fi
+
+          gh release create "$tag" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "File Browser Desktop ${tag}" \
+            --notes-file "$notes" \
+            --prerelease \
+            "dist/FileBrowserDesktop-win-x64-framework-dependent.zip#FileBrowserDesktop-win-x64-framework-dependent.zip"
