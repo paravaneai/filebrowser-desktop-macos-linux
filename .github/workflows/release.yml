@@ -41,7 +41,7 @@ jobs:
 
           gh release create "$tag" \
             --repo "$GITHUB_REPOSITORY" \
-            --title "File Browser Desktop ${tag}" \
+            --title "$tag" \
             --notes-file "$notes" \
             --prerelease \
             "dist/FileBrowserDesktop-win-x64-framework-dependent.zip#FileBrowserDesktop-win-x64-framework-dependent.zip"
