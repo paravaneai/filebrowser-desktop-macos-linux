@@ -1,10 +1,10 @@
-# File Browser Desktop
+# File Browser Desktop Cross Platform
 
 <p align="center">
-  <img src="src/Assets/filebrowser.png" alt="File Browser Desktop logo" width="96">
+  <img src="src/Assets/app-logos/png/filebrowser.png" alt="File Browser logo" width="96">
 </p>
 
-<h3 align="center">A dedicated cross-platform desktop client for privately accessing File Browser over SSH.</h3>
+<h3 align="center">A dedicated Windows desktop client for privately accessing File Browser over SSH.</h3>
 
 <p align="center">
   <a href="INSTALL.md">Installation</a> |
@@ -22,11 +22,11 @@
     <img src="https://img.shields.io/github/license/paravaneai/filebrowser-desktop-cross-platform" alt="License">
   </a>
   <img src="https://img.shields.io/badge/status-public%20preview-7057ff" alt="Public preview">
-  <img src="https://img.shields.io/badge/platform-cross--platform-0078D4" alt="Cross-platform">
+  <img src="https://img.shields.io/badge/platform-Windows-0078D4" alt="Windows">
 </p>
 
 <p align="center">
-  <img src="src/Assets/filebrowser-desktop.png" alt="File Browser Desktop preview">
+  <img src="src/Assets/app-logos/png/filebrowserdesktop-file-window-transfer-glossy-xl_transparent-polished.png" alt="File Browser Desktop preview">
 </p>
 
 ## Overview
@@ -125,7 +125,7 @@ The script installs or configures File Browser as a service, binds it to `127.0.
 
 ## Current Release
 
-The current cross-platform preview release is [v003.003.016](https://github.com/paravaneai/filebrowser-desktop-cross-platform/releases/tag/v003.003.016).
+The current public preview release is [v003.003.016](https://github.com/paravaneai/filebrowser-desktop-cross-platform/releases/tag/v003.003.016).
 
 This project is still early. Expect changes around installation, packaging, onboarding, and profile management before the first stable release.
 
