@@ -1,6 +1,6 @@
 # Install
 
-File Browser Desktop is a Windows desktop client. It runs on your PC and connects to File Browser on a server through SSH.
+File Browser Desktop is a cross-platform desktop client. It runs on your computer and connects to File Browser on a server through SSH.
 
 ## Windows Requirements
 

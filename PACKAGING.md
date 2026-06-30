@@ -1,6 +1,6 @@
 # Packaging
 
-The current release package is a framework-dependent Windows zip.
+The current release package is a framework-dependent desktop zip.
 
 Build it with:
 
@@ -11,7 +11,7 @@ package-release.cmd
 Output:
 
 ```text
-dist\FileBrowserDesktop-win-x64-framework-dependent.zip
+dist\FileBrowserDesktop-cross-platform-framework-dependent.zip
 ```
 
 The zip includes:

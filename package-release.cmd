@@ -3,15 +3,21 @@ setlocal
 
 set "ROOT=%~dp0"
 set "PROJECT=%ROOT%src\FileBrowserDesktop.csproj"
-set "PUBLISH=%ROOT%src\bin\Release\net8.0-windows\win-x64\publish"
+set "PUBLISH=%ROOT%src\bin\Release\net8.0\win-x64\publish"
 set "DIST=%ROOT%dist"
 set "STAGE=%DIST%\stage\FileBrowserDesktop"
-set "ZIP=%DIST%\FileBrowserDesktop-win-x64-framework-dependent.zip"
+set "ZIP=%DIST%\FileBrowserDesktop-cross-platform-framework-dependent.zip"
 
 if not exist "%DIST%" mkdir "%DIST%"
 
 dotnet publish "%PROJECT%" -c Release -r win-x64 --self-contained false
 if errorlevel 1 exit /b 1
+
+if not exist "%PUBLISH%\FileBrowserDesktop.exe" (
+  echo Publish completed, but FileBrowserDesktop.exe was not found:
+  echo   "%PUBLISH%\FileBrowserDesktop.exe"
+  exit /b 1
+)
 
 if exist "%STAGE%" rmdir /s /q "%STAGE%"
 mkdir "%STAGE%"
