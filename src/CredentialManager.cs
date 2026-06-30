@@ -12,6 +12,8 @@ internal static class CredentialManager
     private const int CredentialTypeGeneric = 1;
     private const int CredentialPersistLocalMachine = 2;
 
+    public static bool IsSupported => OperatingSystem.IsWindows();
+
     public static string FileBrowserTargetName(string profileId)
     {
         return $"FileBrowserDesktop/FileBrowser/{profileId}";
@@ -34,6 +36,8 @@ internal static class CredentialManager
 
     private static StoredCredential? Read(string targetName)
     {
+        ThrowIfUnsupported();
+
         if (!CredRead(targetName, CredentialTypeGeneric, 0, out var credentialPointer))
         {
             var error = Marshal.GetLastWin32Error();
@@ -63,6 +67,8 @@ internal static class CredentialManager
 
     private static void Write(string targetName, string username, string password)
     {
+        ThrowIfUnsupported();
+
         var passwordBytes = Encoding.Unicode.GetBytes(password);
         var passwordPointer = Marshal.AllocCoTaskMem(passwordBytes.Length);
 
@@ -99,6 +105,8 @@ internal static class CredentialManager
 
     private static void Delete(string targetName)
     {
+        ThrowIfUnsupported();
+
         if (CredDelete(targetName, CredentialTypeGeneric, 0))
         {
             return;
@@ -108,6 +116,14 @@ internal static class CredentialManager
         if (error != 1168)
         {
             throw new Win32Exception(error, "Could not delete Windows Credential Manager entry.");
+        }
+    }
+
+    private static void ThrowIfUnsupported()
+    {
+        if (!IsSupported)
+        {
+            throw new PlatformNotSupportedException("Credential storage is currently implemented only through Windows Credential Manager.");
         }
     }
 
