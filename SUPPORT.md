@@ -9,12 +9,13 @@ For setup and troubleshooting, start with:
 
 ## Common Checks
 
-- Confirm the Windows machine has .NET 8 Desktop Runtime installed.
-- Confirm Microsoft Edge WebView2 Runtime is installed.
-- Confirm `ssh.exe` is available on PATH.
+- Confirm the machine is running macOS or Linux.
+- Confirm .NET 8 Runtime is installed.
+- Confirm `ssh` is available on PATH.
 - Confirm the server accepts SSH key or agent-based authentication.
 - Confirm File Browser is bound to `127.0.0.1` on the server.
 - Confirm the selected local port is not already in use.
+- On Linux, confirm the normal WebView/native browser packages for the distribution are installed.
 
 ## Security Issues
 

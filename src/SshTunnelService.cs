@@ -26,15 +26,10 @@ internal sealed class SshTunnelService : IDisposable
             throw new InvalidOperationException($"{profile.LocalHost}:{profile.LocalPort} is already in use.");
         }
 
-        var sshPath = OperatingSystem.IsWindows()
-            ? "ssh.exe"
-            : "ssh";
-
         var startInfo = new ProcessStartInfo
         {
-            FileName = sshPath,
+            FileName = "ssh",
             UseShellExecute = false,
-            CreateNoWindow = true,
             RedirectStandardError = true,
             RedirectStandardOutput = true,
         };
@@ -67,12 +62,12 @@ internal sealed class SshTunnelService : IDisposable
         }
         catch (Exception ex)
         {
-            throw new InvalidOperationException("Could not start ssh.exe. Make sure OpenSSH Client is installed and available on PATH.", ex);
+            throw new InvalidOperationException("Could not start ssh. Make sure OpenSSH is installed and available on PATH.", ex);
         }
 
         if (_process is null)
         {
-            throw new InvalidOperationException("Could not start ssh.exe.");
+            throw new InvalidOperationException("Could not start ssh.");
         }
 
         _process.OutputDataReceived += (_, e) => AppendOutput(e.Data);

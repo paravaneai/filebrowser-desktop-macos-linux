@@ -22,6 +22,13 @@ public sealed class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            if (OperatingSystem.IsWindows())
+            {
+                desktop.MainWindow = new UnsupportedPlatformWindow();
+                base.OnFrameworkInitializationCompleted();
+                return;
+            }
+
             var imageConfig = AppImageConfig.Load();
             var splash = new SplashWindow(imageConfig, AppSettingsStore.Current);
             desktop.MainWindow = splash;

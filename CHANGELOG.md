@@ -2,12 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## 003.003.016 - 2026-06-30
+## 001.001.001 - 2026-07-05
 
-- Cross-platform preview release.
-- Added configurable connection profiles.
-- Added SSH tunnel management through the user's installed OpenSSH client.
-- Added optional File Browser credential storage through Windows Credential Manager.
-- Added first-run setup wizard for existing or newly configured File Browser servers.
-- Added safe server setup script that binds File Browser to localhost.
-- Added configurable splash, icon, image, zoom, and theme behavior for the Avalonia desktop shell.
+- Repositioned the app as the macOS/Linux edition.
+- Added a Windows runtime block with a user-facing message.
+- Removed Windows Credential Manager storage from this edition.
+- Disabled credential saving until macOS Keychain and Linux Secret Service support are implemented.
+- Switched SSH execution to `ssh` and server setup streaming to `sh -s --`.
+- Converted the server setup script to POSIX `sh` syntax.
+- Removed Windows `.cmd` launch and release scripts.
+- Removed Windows icon embedding and manifest assumptions.
+- Added POSIX launch and release packaging scripts.
+- Added Linux `.tar.gz` and macOS `.app.tar.gz` packaging paths.
+- Updated CI and release workflow definitions for Ubuntu and macOS.

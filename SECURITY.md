@@ -3,7 +3,7 @@
 File Browser Desktop is designed to keep the File Browser web UI private. The intended model is:
 
 ```text
-Windows desktop app -> SSH tunnel -> server localhost File Browser
+macOS/Linux desktop app -> SSH tunnel -> server localhost File Browser
 ```
 
 Do not expose File Browser directly to the public internet.
@@ -16,7 +16,7 @@ File Browser should bind to localhost only, usually:
 127.0.0.1:8080
 ```
 
-The desktop app then forwards a local Windows port to that private server port through SSH.
+The desktop app forwards a local port to that private server port through SSH.
 
 Good:
 
@@ -36,7 +36,7 @@ The included server setup script configures File Browser for localhost binding a
 
 ## SSH Tunnel Only
 
-The app uses the user's installed `ssh.exe`.
+The app uses the user's installed `ssh`.
 
 Supported authentication paths:
 
@@ -53,8 +53,16 @@ The app does not disable host-key checking. First-time host trust and host-key c
 
 Connection profiles are stored in:
 
+macOS:
+
 ```text
-%APPDATA%\FileBrowserDesktop\profiles.json
+~/Library/Application Support/FileBrowserDesktop/profiles.json
+```
+
+Linux:
+
+```text
+${XDG_CONFIG_HOME:-~/.config}/FileBrowserDesktop/profiles.json
 ```
 
 Profiles may contain:
@@ -76,66 +84,36 @@ Profiles must not contain:
 
 ## File Browser Credentials
 
-Optional File Browser login credentials are stored in Windows Credential Manager under:
+Credential saving is disabled in this macOS/Linux preview.
 
-```text
-FileBrowserDesktop/FileBrowser/<profile-id>
-```
+Planned secure storage backends:
 
-The app reads those credentials only to prefill the File Browser login form. It does not auto-submit login.
+- macOS: Keychain
+- Linux: Secret Service, GNOME Keyring, or KWallet
 
-## Revoke Or Remove Saved Credentials
-
-Preferred in-app method:
-
-1. Open File Browser Desktop.
-2. Select the profile.
-3. Click `Edit`.
-4. Click `Delete saved credential`.
-5. Save the profile.
-
-Windows Credential Manager method:
-
-1. Open Credential Manager:
-
-   ```cmd
-   control /name Microsoft.CredentialManager
-   ```
-
-2. Go to `Windows Credentials`.
-3. Find the generic credential named:
-
-   ```text
-   FileBrowserDesktop/FileBrowser/<profile-id>
-   ```
-
-4. Remove it.
-
-Command-line method:
-
-```cmd
-cmdkey /delete:FileBrowserDesktop/FileBrowser/<profile-id>
-```
+Until those backends are implemented, use File Browser's normal login flow and your operating system or password manager to store passwords.
 
 ## Remove Local App Data
 
-Remove connection profiles:
+Remove connection profiles and app settings:
 
-```text
-%APPDATA%\FileBrowserDesktop\profiles.json
+macOS:
+
+```sh
+rm -rf "$HOME/Library/Application Support/FileBrowserDesktop"
 ```
 
-Remove WebView2 browser data, including File Browser cookies/sessions:
+Linux:
 
-```text
-%LOCALAPPDATA%\FileBrowserDesktop\WebView2
+```sh
+rm -rf "${XDG_CONFIG_HOME:-$HOME/.config}/FileBrowserDesktop"
 ```
 
 ## Server Cleanup
 
 On a systemd-based Linux server, stop and disable File Browser:
 
-```bash
+```sh
 sudo systemctl disable --now filebrowser.service
 ```
 

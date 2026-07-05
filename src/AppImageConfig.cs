@@ -12,7 +12,7 @@ public sealed class AppImageConfig
         AllowTrailingCommas = true,
     };
 
-    public string WindowIconFileName { get; set; } = "filebrowser.ico";
+    public string WindowIconFileName { get; set; } = "app-logos/png/filebrowser.png";
     public string ToolbarLogoFileName { get; set; } = "filebrowser.png";
     public double ToolbarLogoSize { get; set; } = 28;
     public double ToolbarLogoMarginRight { get; set; } = 12;

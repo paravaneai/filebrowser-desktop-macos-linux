@@ -30,8 +30,8 @@ internal static class SshCommandService
 
         var script = File.ReadAllText(scriptPath);
         var prefix = string.Equals(profile.SshUser.Trim(), "root", StringComparison.OrdinalIgnoreCase)
-            ? "bash -s --"
-            : "sudo -n bash -s --";
+            ? "sh -s --"
+            : "sudo -n sh -s --";
 
         var args = new List<string>
         {
@@ -73,12 +73,12 @@ internal static class SshCommandService
         {
             if (!process.Start())
             {
-                throw new InvalidOperationException("Could not start ssh.exe.");
+                throw new InvalidOperationException("Could not start ssh.");
             }
         }
         catch (Exception ex)
         {
-            throw new InvalidOperationException("Could not start ssh.exe. Make sure OpenSSH Client is installed and available on PATH.", ex);
+            throw new InvalidOperationException("Could not start ssh. Make sure OpenSSH is installed and available on PATH.", ex);
         }
 
         process.BeginOutputReadLine();
@@ -108,9 +108,8 @@ internal static class SshCommandService
     {
         var startInfo = new ProcessStartInfo
         {
-            FileName = OperatingSystem.IsWindows() ? "ssh.exe" : "ssh",
+            FileName = "ssh",
             UseShellExecute = false,
-            CreateNoWindow = true,
             RedirectStandardError = true,
             RedirectStandardOutput = true,
         };

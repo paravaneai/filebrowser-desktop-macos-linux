@@ -1,44 +1,69 @@
 # Install
 
-File Browser Desktop is a cross-platform desktop client. It runs on your computer and connects to File Browser on a server through SSH.
+File Browser Desktop for macOS and Linux runs on your desktop and connects to File Browser on a server through SSH.
 
-## Windows Requirements
+This edition does not support Windows.
 
-Install these on the Windows machine that runs the desktop app:
+## Requirements
 
-- .NET 8 Desktop Runtime: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
-- Microsoft Edge WebView2 Runtime: https://developer.microsoft.com/en-us/microsoft-edge/webview2/
-- OpenSSH Client (`ssh.exe`)
+- .NET 8 Runtime: https://dotnet.microsoft.com/download/dotnet/8.0
+- OpenSSH client available as `ssh`
+- A graphical macOS or Linux desktop session
 
-The framework-dependent release zip expects .NET 8 Desktop Runtime to be installed. `RunFileBrowserDesktop.cmd` checks for it before launching.
+Linux distributions may require their normal WebView/native browser packages for embedded web content.
 
-The app also checks for WebView2 at startup and shows the official Microsoft WebView2 install link if it is missing.
+## Install On Linux
 
-## Install From Zip
-
-1. Download the release zip.
+1. Download the Linux `.tar.gz` release archive.
 2. Extract it somewhere writable, for example:
 
-   ```text
-   C:\Tools\FileBrowserDesktop
+   ```sh
+   mkdir -p "$HOME/Applications/FileBrowserDesktop"
+   tar -xzf FileBrowserDesktop-linux-x64-framework-dependent.tar.gz -C "$HOME/Applications/FileBrowserDesktop"
    ```
 
 3. Run:
 
-   ```cmd
-   RunFileBrowserDesktop.cmd
+   ```sh
+   "$HOME/Applications/FileBrowserDesktop/run-filebrowser-desktop.sh"
    ```
 
-4. Follow the first-run wizard.
+## Install On macOS
 
-## First-Run Wizard
+1. Download the macOS `.app.tar.gz` release archive.
+2. Extract it:
 
-The wizard supports two paths:
+   ```sh
+   tar -xzf FileBrowserDesktop-osx-arm64-framework-dependent.app.tar.gz
+   ```
+
+3. Move `File Browser Desktop.app` to `/Applications` or another app folder.
+4. Open the app.
+
+The preview app is not signed or notarized yet, so macOS may require explicit approval in System Settings before first launch.
+
+## Run From Source
+
+From the repository root:
+
+```sh
+sh ./run-filebrowser-desktop.sh
+```
+
+Or directly:
+
+```sh
+dotnet run --project src/FileBrowserDesktop.csproj
+```
+
+## First-Run Setup
+
+The setup surface supports two paths:
 
 - Connect to an existing File Browser instance.
 - Help install/configure File Browser on a server over SSH.
 
-The wizard can:
+The setup flow can:
 
 - Test SSH
 - Run the safe server setup script
@@ -54,24 +79,3 @@ File Browser runs on the server. It should bind to localhost only:
 ```
 
 Do not expose File Browser directly to the public internet. Use the desktop app's SSH tunnel.
-
-See:
-
-```text
-SERVER_SETUP.md
-```
-
-## Framework-Dependent vs Self-Contained
-
-The default release zip is framework-dependent:
-
-- Smaller download
-- Requires .NET 8 Desktop Runtime
-
-A self-contained build is possible later:
-
-```cmd
-dotnet publish src\FileBrowserDesktop.csproj -c Release -r win-x64 --self-contained true
-```
-
-WebView2 is still a separate runtime either way.

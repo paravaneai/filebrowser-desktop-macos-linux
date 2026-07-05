@@ -1,74 +1,61 @@
 # Packaging
 
-The current release package is a framework-dependent desktop zip.
+The current macOS/Linux preview ships as framework-dependent archives.
 
-Build it with:
+Build the package for the current host with:
 
-```cmd
-package-release.cmd
+```sh
+sh ./package-release.sh
 ```
 
-Output:
+Linux output:
 
 ```text
-dist\FileBrowserDesktop-cross-platform-framework-dependent.zip
+dist/FileBrowserDesktop-linux-x64-framework-dependent.tar.gz
 ```
 
-The zip includes:
+macOS output:
 
-- `FileBrowserDesktop.exe`
-- WebView2 loader/runtime support files from the WebView2 NuGet package
-- `RunFileBrowserDesktop.cmd`
-- `server/install-filebrowser-localhost.sh`
-- README/install/security/server setup docs
+```text
+dist/FileBrowserDesktop-osx-arm64-framework-dependent.app.tar.gz
+```
+
+The exact runtime identifier depends on the build host. Set `RID` to override it:
+
+```sh
+RID=linux-x64 sh ./package-release.sh
+RID=linux-arm64 sh ./package-release.sh
+RID=osx-x64 sh ./package-release.sh
+RID=osx-arm64 sh ./package-release.sh
+```
 
 ## Runtime Decision
 
 This project currently ships as framework-dependent.
 
-Required on the user's Windows machine:
+Required on the user's machine:
 
-- .NET 8 Desktop Runtime
-- Microsoft Edge WebView2 Runtime
-- OpenSSH Client (`ssh.exe`)
+- .NET 8 Runtime
+- OpenSSH client available as `ssh`
+- Normal macOS/Linux webview/native browser dependencies
 
 Reasons for framework-dependent packaging:
 
-- Smaller release zip
+- Smaller release archives
 - Easier to inspect
-- Uses standard Windows/OpenSSH components
 - Keeps SSH host-key handling in OpenSSH
-
-`RunFileBrowserDesktop.cmd` checks for .NET 8 Desktop Runtime before launching.
-
-The app checks for missing WebView2 at startup and shows the official Microsoft WebView2 install link.
-
-## Official Runtime Links
-
-- .NET 8 Desktop Runtime: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
-- WebView2 Runtime: https://developer.microsoft.com/en-us/microsoft-edge/webview2/
-
-## Self-Contained Option
-
-For users who do not have .NET installed, publish a larger self-contained build:
-
-```cmd
-dotnet publish src\FileBrowserDesktop.csproj -c Release -r win-x64 --self-contained true
-```
-
-WebView2 is still separate; self-contained .NET does not bundle WebView2.
 
 ## Installer Options Later
 
-Reasonable installer paths:
+Reasonable future package paths:
 
-- MSIX for Microsoft Store-style packaging
-- Inno Setup for a traditional Windows installer
-- WiX for enterprise-style MSI packaging
-- winget manifest once releases are stable
+- macOS signed `.app` bundle and `.dmg`
+- Linux AppImage
+- Linux `.deb` and `.rpm`
+- Flatpak
 
 Recommended next step:
 
-1. Keep the zip release for early testers.
-2. Add an Inno Setup installer that checks/downloads .NET Desktop Runtime and WebView2 Runtime.
-3. Add a winget manifest once release URLs are stable.
+1. Keep `.tar.gz` and `.app.tar.gz` packages for early testers.
+2. Add signing/notarization for macOS.
+3. Add Linux AppImage or distro packages once the runtime dependencies are settled.
