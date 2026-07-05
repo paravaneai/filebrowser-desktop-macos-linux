@@ -69,8 +69,7 @@ internal static class AssetIconLoader
         return extension.Equals(".png", StringComparison.OrdinalIgnoreCase) ||
             extension.Equals(".jpg", StringComparison.OrdinalIgnoreCase) ||
             extension.Equals(".jpeg", StringComparison.OrdinalIgnoreCase) ||
-            extension.Equals(".bmp", StringComparison.OrdinalIgnoreCase) ||
-            extension.Equals(".ico", StringComparison.OrdinalIgnoreCase);
+            extension.Equals(".bmp", StringComparison.OrdinalIgnoreCase);
     }
 
     private static Image CreateBitmapIcon(string filePath, double iconSize)

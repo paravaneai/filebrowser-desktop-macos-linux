@@ -1,25 +1,31 @@
 # Contributing
 
-Thank you for considering a contribution to File Browser Desktop.
+Thank you for considering a contribution to File Browser Desktop for macOS and Linux.
 
 ## Development Setup
 
-Required on Windows:
+Required on macOS or Linux:
 
 - .NET 8 SDK
-- Microsoft Edge WebView2 Runtime
-- OpenSSH Client
+- OpenSSH client available as `ssh`
+- Normal platform webview/native browser dependencies
 
 Build the app:
 
-```cmd
-dotnet build src\FileBrowserDesktop.csproj
+```sh
+dotnet build src/FileBrowserDesktop.csproj
 ```
 
-Create the release zip:
+Run from source:
 
-```cmd
-package-release.cmd
+```sh
+sh ./run-filebrowser-desktop.sh
+```
+
+Create a release package for the current host:
+
+```sh
+sh ./package-release.sh
 ```
 
 ## Pull Requests
@@ -36,7 +42,7 @@ Please keep pull requests focused and include:
 Treat these areas with extra care:
 
 - SSH command construction and host-key behavior.
-- Credential Manager usage.
+- Future macOS Keychain or Linux Secret Service credential storage.
 - File Browser login prefilling.
 - Server installation and systemd service configuration.
 - Any change that could expose File Browser beyond localhost.

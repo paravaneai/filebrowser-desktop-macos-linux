@@ -9,9 +9,15 @@ permissions:
   contents: write
 
 jobs:
-  release:
-    name: Build release
-    runs-on: windows-latest
+  package:
+    name: Package (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
 
     steps:
       - name: Checkout
@@ -23,14 +29,34 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Package
-        run: cmd /c package-release.cmd
+        run: sh ./package-release.sh
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.os }}
+          path: dist/FileBrowserDesktop-*.tar.gz
+
+  release:
+    name: Create release
+    needs: package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+          merge-multiple: true
 
       - name: Create GitHub release
-        shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          set -euo pipefail
+          set -eu
 
           tag="${GITHUB_REF_NAME}"
           notes=".github/release-notes/${tag}.md"
@@ -44,4 +70,4 @@ jobs:
             --title "$tag" \
             --notes-file "$notes" \
             --prerelease \
-            "dist/FileBrowserDesktop-cross-platform-framework-dependent.zip#FileBrowserDesktop-cross-platform-framework-dependent.zip"
+            release-artifacts/FileBrowserDesktop-*.tar.gz

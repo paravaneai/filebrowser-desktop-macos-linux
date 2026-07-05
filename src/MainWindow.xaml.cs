@@ -146,7 +146,7 @@ public sealed class MainWindow : Window
         _profileComboBox.SelectionChanged += async (_, _) => await ProfileSelectionChangedAsync();
         AddToolbarChild(grid, _profileComboBox, 0);
 
-        ConfigureButton(_newProfileButton, "New", 54, ButtonKind.Primary);
+        ConfigureButton(_newProfileButton, "New", 54, UiButtonStyle.Primary);
         _newProfileButton.Click += async (_, _) => await NewProfileAsync();
         AddToolbarChild(grid, _newProfileButton, 1, new Thickness(0, 0, 6, 0));
 
@@ -261,7 +261,7 @@ public sealed class MainWindow : Window
         _startupProgress.IsIndeterminate = true;
         panel.Children.Add(_startupProgress);
 
-        ConfigureButton(_openSetupButton, "Open setup", 128, ButtonKind.Primary);
+        ConfigureButton(_openSetupButton, "Open setup", 128, UiButtonStyle.Primary);
         _openSetupButton.HorizontalAlignment = HorizontalAlignment.Center;
         _openSetupButton.Margin = new Thickness(0, 22, 0, 0);
         _openSetupButton.IsVisible = false;
@@ -857,42 +857,14 @@ public sealed class MainWindow : Window
         }
     }
 
-    private void ConfigureButton(Button button, string content, double minWidth, ButtonKind kind = ButtonKind.Neutral)
+    private static void ConfigureButton(Button button, string content, double minWidth, UiButtonStyle style = UiButtonStyle.Neutral)
     {
-        button.Content = content;
-        button.MinWidth = minWidth;
-        button.Height = 32;
-        button.Padding = new Thickness(10, 0);
-        button.VerticalAlignment = VerticalAlignment.Center;
-        button.HorizontalContentAlignment = HorizontalAlignment.Center;
-        button.VerticalContentAlignment = VerticalAlignment.Center;
-        button.BorderThickness = new Thickness(1);
-        button.CornerRadius = new CornerRadius(6);
-
-        ApplyButtonTheme(button, kind == ButtonKind.Primary);
+        UiTheme.ConfigureToolbarButton(button, content, minWidth, style);
     }
 
     private void ApplyButtonTheme(Button button, bool primary)
     {
-        if (primary)
-        {
-        button.Background = BrushFor("#2563EB");
-        button.BorderBrush = BrushFor("#1D4ED8");
-        button.Foreground = BrushFor("#FFFFFF");
-        if (button.Content is PathIcon primaryIcon)
-        {
-            primaryIcon.Foreground = button.Foreground;
-        }
-        return;
-    }
-
-    button.Background = BrushFor(_isDarkTheme ? "#172033" : "#F8FAFC");
-    button.BorderBrush = BrushFor(_isDarkTheme ? "#40516D" : "#CBD5E1");
-    button.Foreground = BrushFor(_isDarkTheme ? "#F8FAFC" : "#1E293B");
-    if (button.Content is PathIcon icon)
-    {
-        icon.Foreground = button.Foreground;
-    }
+        UiTheme.ApplyButtonTheme(button, primary ? UiButtonStyle.Primary : UiButtonStyle.Neutral, _isDarkTheme);
     }
 
     private void ApplySettingsButtonConfig()
@@ -954,9 +926,4 @@ public sealed class MainWindow : Window
         return SolidColorBrush.Parse(color);
     }
 
-    private enum ButtonKind
-    {
-        Neutral,
-        Primary,
-    }
 }

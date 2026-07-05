@@ -1,5 +1,5 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/sh
+set -eu
 
 ROOT_DIR="/"
 ADDRESS="127.0.0.1"
@@ -18,10 +18,10 @@ Defaults:
   - Does not open any firewall ports
 
 Usage:
-  sudo bash install-filebrowser-localhost.sh
-  sudo bash install-filebrowser-localhost.sh --root /srv
-  sudo bash install-filebrowser-localhost.sh --port 8081
-  sudo bash install-filebrowser-localhost.sh --already-installed
+  sudo sh install-filebrowser-localhost.sh
+  sudo sh install-filebrowser-localhost.sh --root /srv
+  sudo sh install-filebrowser-localhost.sh --port 8081
+  sudo sh install-filebrowser-localhost.sh --already-installed
 
 Options:
   --root PATH          File Browser root directory. Default: /
@@ -31,6 +31,14 @@ Options:
   --already-installed Do not install File Browser; configure the existing binary
   -h, --help          Show help
 USAGE
+}
+
+need_value() {
+  option=$1
+  if [ "$#" -lt 2 ] || [ -z "$2" ]; then
+    echo "$option requires a value." >&2
+    exit 2
+  fi
 }
 
 install_curl() {
@@ -49,22 +57,26 @@ install_curl() {
   fi
 }
 
-while [[ $# -gt 0 ]]; do
+while [ "$#" -gt 0 ]; do
   case "$1" in
     --root)
-      ROOT_DIR="$2"
+      need_value "$1" "${2:-}"
+      ROOT_DIR=$2
       shift 2
       ;;
     --address)
-      ADDRESS="$2"
+      need_value "$1" "${2:-}"
+      ADDRESS=$2
       shift 2
       ;;
     --port)
-      PORT="$2"
+      need_value "$1" "${2:-}"
+      PORT=$2
       shift 2
       ;;
     --db)
-      DB_PATH="$2"
+      need_value "$1" "${2:-}"
+      DB_PATH=$2
       shift 2
       ;;
     --already-installed)
@@ -83,19 +95,22 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ "$(id -u)" != "0" ]]; then
+if [ "$(id -u)" != "0" ]; then
   echo "Please run this script with sudo or as root." >&2
   exit 1
 fi
 
-if [[ "$ADDRESS" != "127.0.0.1" && "$ADDRESS" != "::1" && "$ADDRESS" != "localhost" ]]; then
-  echo "Refusing to bind File Browser to a non-localhost address: $ADDRESS" >&2
-  echo "Use an SSH tunnel from the desktop app instead of exposing File Browser publicly." >&2
-  exit 1
-fi
+case "$ADDRESS" in
+  127.0.0.1|::1|localhost) ;;
+  *)
+    echo "Refusing to bind File Browser to a non-localhost address: $ADDRESS" >&2
+    echo "Use an SSH tunnel from the desktop app instead of exposing File Browser publicly." >&2
+    exit 1
+    ;;
+esac
 
 if ! command -v filebrowser >/dev/null 2>&1; then
-  if [[ "$SKIP_INSTALL" == "1" ]]; then
+  if [ "$SKIP_INSTALL" = "1" ]; then
     echo "filebrowser was not found on PATH, and --already-installed was provided." >&2
     exit 1
   fi
@@ -105,16 +120,16 @@ if ! command -v filebrowser >/dev/null 2>&1; then
   fi
 
   echo "Installing File Browser..."
-  curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bash
+  curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | sh
 fi
 
-FILEBROWSER_BIN="$(command -v filebrowser)"
-DB_DIR="$(dirname "$DB_PATH")"
+FILEBROWSER_BIN=$(command -v filebrowser)
+DB_DIR=$(dirname "$DB_PATH")
 mkdir -p "$DB_DIR"
 chmod 0750 "$DB_DIR"
 
 NEW_DB="0"
-if [[ ! -f "$DB_PATH" ]]; then
+if [ ! -f "$DB_PATH" ]; then
   NEW_DB="1"
   filebrowser config init -d "$DB_PATH" >/dev/null
 fi
@@ -125,13 +140,8 @@ filebrowser config set \
   --port "$PORT" \
   --root "$ROOT_DIR" >/dev/null
 
-if [[ "$NEW_DB" == "1" ]]; then
-  ADMIN_PASSWORD="$(python3 - <<'PY'
-import secrets, string
-alphabet = string.ascii_letters + string.digits
-print(''.join(secrets.choice(alphabet) for _ in range(24)))
-PY
-)"
+if [ "$NEW_DB" = "1" ]; then
+  ADMIN_PASSWORD=$(python3 -c 'import secrets, string; alphabet = string.ascii_letters + string.digits; print("".join(secrets.choice(alphabet) for _ in range(24)))')
   filebrowser users add admin "$ADMIN_PASSWORD" -d "$DB_PATH" --perm.admin >/dev/null
 fi
 
@@ -163,11 +173,11 @@ echo
 echo "This script did not open any firewall ports."
 echo "Use the desktop app or an SSH tunnel to access File Browser."
 
-if [[ "$NEW_DB" == "1" ]]; then
+if [ "$NEW_DB" = "1" ]; then
   echo
   echo "Initial File Browser login:"
   echo "  username: admin"
   echo "  password: $ADMIN_PASSWORD"
   echo
-  echo "Store this password in a password manager or Windows Credential Manager."
+  echo "Store this password in a password manager."
 fi

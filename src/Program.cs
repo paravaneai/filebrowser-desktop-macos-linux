@@ -1,15 +1,11 @@
 using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace FileBrowserDesktop;
 
 internal static class Program
 {
-    private static readonly string SingleInstanceMutexName = OperatingSystem.IsWindows()
-        ? @"Local\ParavaneLabs.FileBrowserDesktop"
-        : "ParavaneLabs.FileBrowserDesktop";
+    private const string SingleInstanceMutexName = "ParavaneLabs.FileBrowserDesktop.MacOsLinux";
 
     private static Mutex? singleInstanceMutex;
     private static bool ownsSingleInstanceMutex;
@@ -22,11 +18,6 @@ internal static class Program
         if (!IsSplashPreview(args) && !TryAcquireSingleInstance())
         {
             return;
-        }
-
-        if (OperatingSystem.IsWindows())
-        {
-            _ = SetCurrentProcessExplicitAppUserModelID("ParavaneLabs.FileBrowserDesktop");
         }
 
         try
@@ -47,9 +38,6 @@ internal static class Program
             .WithInterFont()
             .LogToTrace();
     }
-
-    [DllImport("shell32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-    private static extern int SetCurrentProcessExplicitAppUserModelID(string appId);
 
     private static bool IsSplashPreview(string[] args)
     {

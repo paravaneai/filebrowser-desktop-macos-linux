@@ -1,6 +1,0 @@
-<Project>
-  <PropertyGroup>
-    <!-- Use an .ico file here. Windows exe/taskbar icons are embedded during build. -->
-    <ConfiguredApplicationIcon>Assets\windows-icon\ico\filebrowserdesktop-file-window-transfer-glossy.ico</ConfiguredApplicationIcon>
-  </PropertyGroup>
-</Project>

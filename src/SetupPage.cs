@@ -368,7 +368,9 @@ public sealed class SetupPage : UserControl
     private Control BuildCredentialSection()
     {
         _saveFileBrowserCredentialCheckBox.Margin = new Thickness(0, 10, 0, 10);
-        _saveFileBrowserCredentialCheckBox.Content = "Save File Browser login for this profile";
+        _saveFileBrowserCredentialCheckBox.Content = CredentialManager.IsSupported
+            ? "Save File Browser login for this profile"
+            : "Save File Browser login (not available yet)";
         _saveFileBrowserCredentialCheckBox.IsEnabled = CredentialManager.IsSupported;
         _checkBoxes.Add(_saveFileBrowserCredentialCheckBox);
 
@@ -378,6 +380,8 @@ public sealed class SetupPage : UserControl
             RowDefinitions = new RowDefinitions("Auto,Auto,Auto"),
         };
 
+        _fileBrowserUsernameTextBox.IsEnabled = CredentialManager.IsSupported;
+        _fileBrowserPasswordBox.IsEnabled = CredentialManager.IsSupported;
         AddProfileRow(form, 0, "Username", _fileBrowserUsernameTextBox, spanActionColumn: false);
         AddProfileRow(form, 1, "Password", _fileBrowserPasswordBox, spanActionColumn: false);
 
@@ -397,8 +401,8 @@ public sealed class SetupPage : UserControl
         stack.Children.Add(PrimaryText("File Browser Login", 15, FontWeight.SemiBold));
         stack.Children.Add(SecondaryText(
             CredentialManager.IsSupported
-                ? "Optional. Saved credentials live in Windows Credential Manager and are used to automatically prefill the File Browser login form."
-                : "Credential saving is unavailable on this platform. Do not store File Browser passwords in profile JSON.",
+                ? "Optional. Saved credentials are used to automatically prefill the File Browser login form."
+                : "Credential saving is disabled in this macOS/Linux preview. Use File Browser's normal login screen and do not store passwords in profile JSON.",
             new Thickness(0, 6, 0, 0)));
         stack.Children.Add(_saveFileBrowserCredentialCheckBox);
         stack.Children.Add(form);
@@ -710,7 +714,7 @@ public sealed class SetupPage : UserControl
         if (!CredentialManager.IsSupported)
         {
             _saveFileBrowserCredentialCheckBox.IsChecked = false;
-            _credentialStatusText.Text = "Credential saving is unavailable on this platform.";
+            _credentialStatusText.Text = "Credential saving is disabled in this macOS/Linux preview.";
             return;
         }
 
@@ -1033,38 +1037,12 @@ public sealed class SetupPage : UserControl
 
     private void ConfigureButton(Button button, string content, double width)
     {
-        button.Content = content;
-        button.Width = width;
-        button.Height = 34;
-        button.Margin = new Thickness(0, 0, 8, 8);
-        button.Padding = new Thickness(12, 0);
-        button.BorderThickness = new Thickness(1);
-        button.CornerRadius = new CornerRadius(7);
-        button.HorizontalContentAlignment = HorizontalAlignment.Center;
-        button.VerticalContentAlignment = VerticalAlignment.Center;
+        UiTheme.ConfigureSetupButton(button, content, width);
     }
 
     private void ApplyButtonTheme(Button button, bool primary)
     {
-        if (primary)
-        {
-            button.Background = BrushFor("#2563EB");
-            button.BorderBrush = BrushFor("#1D4ED8");
-            button.Foreground = BrushFor("#FFFFFF");
-            if (button.Content is PathIcon primaryIcon)
-            {
-                primaryIcon.Foreground = button.Foreground;
-            }
-            return;
-        }
-
-        button.Background = BrushFor(_isDarkTheme ? "#172033" : "#F8FAFC");
-        button.BorderBrush = BrushFor(_isDarkTheme ? "#40516D" : "#CBD5E1");
-        button.Foreground = BrushFor(_isDarkTheme ? "#F8FAFC" : "#1E293B");
-        if (button.Content is PathIcon icon)
-        {
-            icon.Foreground = button.Foreground;
-        }
+        UiTheme.ApplyButtonTheme(button, primary ? UiButtonStyle.Primary : UiButtonStyle.Neutral, _isDarkTheme);
     }
 
     private void ResetCancellation()

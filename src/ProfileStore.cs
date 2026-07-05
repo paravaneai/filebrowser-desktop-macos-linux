@@ -14,9 +14,7 @@ public sealed class ProfileStore
     public string? SelectedProfileId { get; set; }
     public List<ConnectionProfile> Profiles { get; set; } = [];
 
-    public static string DirectoryPath => Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "FileBrowserDesktop");
+    public static string DirectoryPath => Path.Combine(GetConfigRoot(), "FileBrowserDesktop");
 
     public static string FilePath => Path.Combine(DirectoryPath, "profiles.json");
 
@@ -56,5 +54,27 @@ public sealed class ProfileStore
         }
 
         return Profiles.FirstOrDefault();
+    }
+
+    private static string GetConfigRoot()
+    {
+        var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        if (string.IsNullOrWhiteSpace(home))
+        {
+            home = Environment.GetEnvironmentVariable("HOME") ?? ".";
+        }
+
+        if (OperatingSystem.IsMacOS())
+        {
+            return Path.Combine(home, "Library", "Application Support");
+        }
+
+        var xdgConfigHome = Environment.GetEnvironmentVariable("XDG_CONFIG_HOME");
+        if (!string.IsNullOrWhiteSpace(xdgConfigHome))
+        {
+            return xdgConfigHome;
+        }
+
+        return Path.Combine(home, ".config");
     }
 }

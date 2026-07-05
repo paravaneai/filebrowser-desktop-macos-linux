@@ -111,7 +111,7 @@ The script installs or configures File Browser as a service, binds it to `127.0.
 
 ## Current Release
 
-The current macOS/Linux preview release is `v004.000.000`.
+The current macOS/Linux preview release is `v001.001.001`.
 
 This project is still early. Expect changes around packaging, credential storage, onboarding, and profile management before the first stable release.
 
