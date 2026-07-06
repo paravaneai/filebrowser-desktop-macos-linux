@@ -26,7 +26,7 @@ detect_rid() {
 copy_docs() {
   destination=$1
   mkdir -p "$destination"
-  for file in README.md INSTALL.md LICENSE CHANGELOG.md CONTRIBUTING.md SECURITY.md SUPPORT.md SERVER_SETUP.md PACKAGING.md; do
+  for file in README.md INSTALL.md LICENSE CONTRIBUTING.md SECURITY.md SUPPORT.md SERVER_SETUP.md PACKAGING.md; do
     if [ -f "$ROOT/$file" ]; then
       cp "$ROOT/$file" "$destination/"
     fi

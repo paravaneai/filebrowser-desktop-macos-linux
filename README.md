@@ -11,7 +11,7 @@
   <a href="INSTALL.md">Installation</a> |
   <a href="SERVER_SETUP.md">Server setup</a> |
   <a href="SECURITY.md">Security</a> |
-  <a href="CHANGELOG.md">Release notes</a> |
+  <a href="https://github.com/paravaneai/filebrowser-desktop-macos-linux/releases">Releases</a> |
   <a href="CONTRIBUTING.md">Contributing</a>
 </p>
 
@@ -111,7 +111,7 @@ The script installs or configures File Browser as a service, binds it to `127.0.
 
 ## Current Release
 
-The current macOS/Linux preview release is `v001.001.001`.
+The current macOS/Linux preview release is [v001.001.000](https://github.com/paravaneai/filebrowser-desktop-macos-linux/releases/tag/v001.001.000).
 
 This project is still early. Expect changes around packaging, credential storage, onboarding, and profile management before the first stable release.
 
