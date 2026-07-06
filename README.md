@@ -109,17 +109,40 @@ server/install-filebrowser-localhost.sh
 
 The script installs or configures File Browser as a service, binds it to `127.0.0.1`, and does not open public firewall ports. See [SERVER_SETUP.md](SERVER_SETUP.md).
 
+## Documentation
+
+| Document | Purpose |
+| --- | --- |
+| [INSTALL.md](INSTALL.md) | Windows install steps and prerequisites |
+| [SERVER_SETUP.md](SERVER_SETUP.md) | Server install and existing-server setup |
+| [SECURITY.md](SECURITY.md) | Security model, credential storage, and cleanup |
+| [PACKAGING.md](PACKAGING.md) | Release packaging notes |
+| [SUPPORT.md](SUPPORT.md) | Support expectations |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Development and pull request guidance |
+
 ## Current Release
 
 The current macOS/Linux preview release is [v001.001.000](https://github.com/paravaneai/filebrowser-desktop-macos-linux/releases/tag/v001.001.000).
 
 This project is still early. Expect changes around packaging, credential storage, onboarding, and profile management before the first stable release.
 
+## Contributing
+
+Contributions are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, branch guidance, and pull request expectations.
+
+Please also review [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+
+## Security
+
+Please do not report sensitive security issues in public issues. See [SECURITY.md](SECURITY.md) for the supported connection model, credential storage details, revocation steps, and reporting guidance.
+
 ## Relationship To File Browser
 
-File Browser Desktop is an independent Paravane Labs project. Paravane Labs does not own File Browser and is not affiliated with, endorsed by, or sponsored by the File Browser project.
+File Browser Desktop is complementary tooling designed to work with the upstream [filebrowser/filebrowser](https://github.com/filebrowser/filebrowser) project.
 
-File Browser is a separate project run by its own maintainers. This desktop app is only a convenience client for connecting to a File Browser instance that you operate.
+File Browser Desktop is an independent Paravane Labs project. Paravane Labs does not own, maintain, control, or represent the File Browser project, and is not affiliated with, endorsed by, sponsored by, or otherwise officially associated with the File Browser project or its maintainers.
+
+File Browser is a separate open source project maintained by its respective contributors. This application is provided solely as a convenience client for connecting to a File Browser instance that you operate or are authorized to access.
 
 ## License
 
