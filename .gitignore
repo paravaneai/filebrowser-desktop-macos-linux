@@ -18,3 +18,4 @@ profiles.json
 
 # Local visual QA helpers, not part of the distributable project.
 run-splash-preview.sh
+package-release.sh
